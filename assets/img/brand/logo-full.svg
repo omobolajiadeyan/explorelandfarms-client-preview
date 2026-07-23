@@ -5,10 +5,10 @@
   </defs>
 
   <!-- three-leaf mark: symmetric petal, rotated around a shared base point so it stays balanced -->
-  <use href="#leaf" fill="#1b5e20" transform="rotate(-6 140 240) translate(0 6) scale(0.86)" transform-origin="140 240"/>
-  <use href="#leaf" fill="#2e7d32" transform="rotate(32 140 240)"/>
-  <use href="#leaf" fill="#8dc63f" transform="rotate(-34 140 240)"/>
+  <use href="#leaf" fill="#315026" transform="rotate(-6 140 240) translate(0 6) scale(0.86)" transform-origin="140 240"/>
+  <use href="#leaf" fill="#588e43" transform="rotate(32 140 240)"/>
+  <use href="#leaf" fill="#ade64c" transform="rotate(-34 140 240)"/>
 
   <text x="300" y="178" font-family="Manrope, 'Segoe UI', Arial, sans-serif" font-weight="800"
-        font-size="140" letter-spacing="-2" fill="#1b5e20">Exploreland <tspan fill="#2e7d32">Farms</tspan></text>
+        font-size="140" letter-spacing="-2" fill="#22371a">Exploreland <tspan fill="#588e43">Farms</tspan></text>
 </svg>

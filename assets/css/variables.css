@@ -1,20 +1,20 @@
 /* ExploreLand Farms — design tokens
-   Palette sampled directly from the client logo (leaf mark + wordmark),
-   extended into a full warm/organic scale. See content-audit for source. */
+   Palette built from the client's official brand colors (#588E43 green,
+   #ADE64C lime), extended into a full scale at matched hue/saturation. */
 :root {
-  /* Greens — sampled from logo wordmark + darker leaf */
-  --green-950: #0b2408;
-  --green-900: #123a0f;
-  --green-800: #1b5e20;
-  --green-700: #235c1a;
-  --green-600: #2e7d32;
-  --green-500: #3f8f34;
+  /* Greens — scale built from official brand green #588E43 */
+  --green-950: #152310;
+  --green-900: #22371a;
+  --green-800: #315026;
+  --green-700: #456f34;
+  --green-600: #588e43; /* official brand green */
+  --green-500: #6bad52;
 
-  /* Limes — sampled from the lightest logo leaf */
-  --lime-500: #7ab82f;
-  --lime-400: #8dc63f;
-  --lime-300: #a2cb22;
-  --lime-200: #c3e06a;
+  /* Limes — scale built from official brand lime #ADE64C */
+  --lime-500: #92d71e;
+  --lime-400: #a3e336;
+  --lime-300: #ade64c; /* official brand lime */
+  --lime-200: #c6ee82;
 
   /* Warm neutrals — organic, not clinical white/black */
   --cream-50: #faf7ef;
