@@ -1,0 +1,64 @@
+/* ExploreLand Farms — design tokens
+   Palette sampled directly from the client logo (leaf mark + wordmark),
+   extended into a full warm/organic scale. See content-audit for source. */
+:root {
+  /* Greens — sampled from logo wordmark + darker leaf */
+  --green-950: #0b2408;
+  --green-900: #123a0f;
+  --green-800: #1b5e20;
+  --green-700: #235c1a;
+  --green-600: #2e7d32;
+  --green-500: #3f8f34;
+
+  /* Limes — sampled from the lightest logo leaf */
+  --lime-500: #7ab82f;
+  --lime-400: #8dc63f;
+  --lime-300: #a2cb22;
+  --lime-200: #c3e06a;
+
+  /* Warm neutrals — organic, not clinical white/black */
+  --cream-50: #faf7ef;
+  --cream-100: #f3eee0;
+  --cream-200: #e9e2cd;
+  --stone-800: #23261f;
+  --stone-600: #52564a;
+  --stone-400: #8a8c7e;
+
+  --white: #ffffff;
+
+  /* Semantic */
+  --bg: var(--cream-50);
+  --bg-alt: var(--cream-100);
+  --ink: var(--stone-800);
+  --ink-soft: var(--stone-600);
+  --brand: var(--green-700);
+  --brand-deep: var(--green-900);
+  --accent: var(--lime-400);
+  --accent-bright: var(--lime-300);
+
+  /* Type */
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Manrope", "Segoe UI", system-ui, sans-serif;
+
+  /* Scale */
+  --step-1: clamp(0.85rem, 0.82rem + 0.15vw, 0.95rem);
+  --step0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step1: clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
+  --step2: clamp(1.6rem, 1.4rem + 1vw, 2.1rem);
+  --step3: clamp(2.2rem, 1.8rem + 2vw, 3.2rem);
+  --step4: clamp(2.8rem, 2.1rem + 3.5vw, 4.6rem);
+  --step5: clamp(3.4rem, 2.4rem + 5vw, 6.2rem);
+
+  /* Layout */
+  --container: 1280px;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 28px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --dur-fast: 250ms;
+  --dur-med: 600ms;
+  --dur-slow: 1100ms;
+}
