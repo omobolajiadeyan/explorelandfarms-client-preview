@@ -54,7 +54,7 @@
 <a class="visually-hidden" href="#main">Skip to content</a>
 <div class="site-loader" aria-hidden="true">
   <div class="site-loader-inner">
-    <img src="assets/img/brand/leaf-mark.png" alt="">
+    <img src="assets/img/brand/leaf-mark.svg" alt="">
     <span>ExploreLand Farms</span>
     <small>Cultivating the experience</small>
     <span class="site-loader-line"></span>
@@ -139,29 +139,41 @@
             <span class="eco-ring eco-ring-outer" aria-hidden="true"></span>
             <span class="eco-ring eco-ring-inner" aria-hidden="true"></span>
             <div class="eco-core">
-              <img src="assets/img/brand/leaf-mark.png" alt="">
+              <img src="assets/img/brand/leaf-mark.svg" alt="">
               <strong>Land</strong>
               <span>one living system</span>
             </div>
-            <div class="eco-node eco-node-soil"><span>01</span><b>Healthy soil</b></div>
-            <div class="eco-node eco-node-trees"><span>02</span><b>Thriving trees</b></div>
-            <div class="eco-node eco-node-herds"><span>03</span><b>Responsible herds</b></div>
-            <div class="eco-node eco-node-markets"><span>04</span><b>Local markets</b></div>
+            <button type="button" class="eco-node eco-node-soil is-active" data-eco-story="soil" aria-pressed="true">
+              <i class="bi bi-flower1" aria-hidden="true"></i><span>01</span><b>Healthy soil</b>
+            </button>
+            <button type="button" class="eco-node eco-node-trees" data-eco-story="trees" aria-pressed="false">
+              <i class="bi bi-tree" aria-hidden="true"></i><span>02</span><b>Thriving trees</b>
+            </button>
+            <button type="button" class="eco-node eco-node-herds" data-eco-story="herds" aria-pressed="false">
+              <i class="bi bi-heart-pulse" aria-hidden="true"></i><span>03</span><b>Responsible herds</b>
+            </button>
+            <button type="button" class="eco-node eco-node-markets" data-eco-story="markets" aria-pressed="false">
+              <i class="bi bi-basket2" aria-hidden="true"></i><span>04</span><b>Local markets</b>
+            </button>
           </div>
         </div>
 
         <div class="eco-stories" data-stagger="100">
-          <article class="eco-story reveal">
-            <span class="eco-story-number">01</span>
+          <article class="eco-story is-active reveal" data-eco-panel="soil">
+            <span class="eco-story-number"><i class="bi bi-flower1" aria-hidden="true"></i></span>
             <div><h3>Regenerate before we extract.</h3><p>Forestry and farming decisions begin with the long-term health of the soil, trees, water, and habitat around them.</p></div>
           </article>
-          <article class="eco-story reveal">
-            <span class="eco-story-number">02</span>
-            <div><h3>Keep value closer to the farm.</h3><p>Exploreland Markets shortens the journey between responsible production and the families who need fresh, traceable food.</p></div>
+          <article class="eco-story reveal" data-eco-panel="trees">
+            <span class="eco-story-number"><i class="bi bi-tree" aria-hidden="true"></i></span>
+            <div><h3>Plant for the long view.</h3><p>Managed forestry grows useful timber, stronger habitat, and future value from the same carefully stewarded land.</p></div>
           </article>
-          <article class="eco-story reveal">
-            <span class="eco-story-number">03</span>
-            <div><h3>Build with the landscape.</h3><p>Exploreland Homes brings nature, comfort, and responsible land use into the same development conversation.</p></div>
+          <article class="eco-story reveal" data-eco-panel="herds">
+            <span class="eco-story-number"><i class="bi bi-heart-pulse" aria-hidden="true"></i></span>
+            <div><h3>Raise animals with care.</h3><p>Low-stress grazing connects animal welfare, healthy pasture, and dependable food in one responsible cycle.</p></div>
+          </article>
+          <article class="eco-story reveal" data-eco-panel="markets">
+            <span class="eco-story-number"><i class="bi bi-basket2" aria-hidden="true"></i></span>
+            <div><h3>Keep value closer to the farm.</h3><p>Exploreland Markets shortens the journey between responsible production and the families who need fresh, traceable food.</p></div>
           </article>
           <a class="eco-story-link reveal" href="about/">Explore our sustainability story <span aria-hidden="true">&rarr;</span></a>
           <div class="future-ready-note reveal">
@@ -314,10 +326,12 @@
         <p class="eyebrow reveal">Leadership</p>
         <h2 class="reveal d-1">The people behind the land.</h2>
       </div>
-      <div class="team-grid reveal" data-stagger="80">
-        <div class="team-card"><div class="team-photo"><img src="assets/img/team/ayeni-mayowa.png" alt="Mr. Ayeni Mayowa" loading="lazy"></div><h4>Mr. Ayeni Mayowa</h4><span>Director</span></div>
-        <div class="team-card"><div class="team-photo"><img src="assets/img/team/ayeni-omojolaade.png" alt="Ayeni Omojolaade" loading="lazy"></div><h4>Ayeni Omojolaade</h4><span>Deputy Director</span></div>
-        <div class="team-card"><div class="team-photo"><img src="assets/img/team/soliat-odunayo-salaudeen.png" alt="Soliat Odunayo Salaudeen" loading="lazy"></div><h4>Soliat Odunayo Salaudeen</h4><span>Manager</span></div>
+      <div class="team-grid leadership-grid home-leadership-grid reveal" data-stagger="70">
+        <div class="team-card leadership-card leadership-director"><div class="team-photo"><img src="assets/img/team/ayeni-mayowa-headshot.png" alt="Mr. Ayeni Mayowa, Director" loading="lazy"></div><h4>Mr. Ayeni Mayowa</h4><span>Director</span></div>
+        <div class="team-card leadership-card"><div class="team-photo"><img src="assets/img/team/ayeni-omojolaade.png" alt="Ayeni Omojolaade, Deputy Director" loading="lazy"></div><h4>Ayeni Omojolaade</h4><span>Deputy Director</span></div>
+        <div class="team-card leadership-card"><div class="team-photo"><img src="assets/img/team/soliat-odunayo-salaudeen.png" alt="Soliat Odunayo Salaudeen, Manager" loading="lazy"></div><h4>Soliat Odunayo Salaudeen</h4><span>Manager</span></div>
+        <div class="team-card leadership-card"><div class="team-photo"><img src="assets/img/team/oluwafunke-anifowoshe.png" alt="Oluwafunke Anifowoshe, HON-Executive USA" loading="lazy"></div><h4>Oluwafunke Anifowoshe</h4><span>HON-Executive (USA)</span></div>
+        <div class="team-card leadership-card"><div class="team-photo"><img src="assets/img/team/aofolajuwonlo-babatunde.png" alt="Aofolajuwonlo Babatunde, HON-Executive USA" loading="lazy"></div><h4>Aofolajuwonlo Babatunde</h4><span>HON-Executive (USA)</span></div>
       </div>
       <div class="section-more"><a href="team/" class="btn btn-primary">Meet the full team <span class="btn-arrow">→</span></a></div>
     </div>
@@ -331,10 +345,17 @@
           <p class="eyebrow reveal">Client Stories</p>
           <h2 class="reveal d-1">Trust grows through experience.</h2>
         </div>
-        <p class="testimonials-intro reveal d-2">Perspectives from people who have experienced our approach to responsible land, property, and long-term value.</p>
+        <div class="testimonials-side reveal d-2">
+          <p class="testimonials-intro">Perspectives from people who have experienced our approach to responsible land, property, and long-term value.</p>
+          <div class="testimonial-controls" aria-label="Client story controls">
+            <button type="button" class="testimonial-control testimonial-prev" aria-label="Previous client story" aria-controls="testimonial-track"><i class="bi bi-arrow-left" aria-hidden="true"></i></button>
+            <span class="testimonial-progress" aria-live="polite"><b>1</b> / 3</span>
+            <button type="button" class="testimonial-control testimonial-next" aria-label="Next client story" aria-controls="testimonial-track"><i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+          </div>
+        </div>
       </div>
-      <div class="testimonial-grid reveal" data-stagger="90">
-        <article class="testimonial-card testimonial-featured">
+      <div class="testimonial-grid reveal" id="testimonial-track" role="list" tabindex="0" data-stagger="90">
+        <article class="testimonial-card" role="listitem">
           <div class="testimonial-card-top">
             <span class="testimonial-label">Property &amp; sustainability</span>
             <span class="testimonial-mark" aria-hidden="true"><i class="bi bi-quote"></i></span>
@@ -348,7 +369,7 @@
             <div class="testimonial-who">Samantha Kuntha <span>South Africa</span></div>
           </div>
         </article>
-        <article class="testimonial-card">
+        <article class="testimonial-card" role="listitem">
           <div class="testimonial-card-top">
             <span class="testimonial-label">Responsible development</span>
             <span class="testimonial-mark" aria-hidden="true"><i class="bi bi-quote"></i></span>
@@ -362,7 +383,7 @@
             <div class="testimonial-who">Maria Toms <span>United States</span></div>
           </div>
         </article>
-        <article class="testimonial-card">
+        <article class="testimonial-card" role="listitem">
           <div class="testimonial-card-top">
             <span class="testimonial-label">Land &amp; living</span>
             <span class="testimonial-mark" aria-hidden="true"><i class="bi bi-quote"></i></span>
@@ -457,7 +478,7 @@
     </div>
     <div class="footer-bottom">
       <span>All rights reserved.</span>
-      <span class="footer-credit">redesigned by <a href="https://frenimi.com" target="_blank" rel="noopener">frenimi</a></span>
+      <span class="footer-credit">redesigned by <a href="https://frenimi.com" target="_blank" rel="noopener">FreNiMi</a></span>
     </div>
   </div>
 </footer>

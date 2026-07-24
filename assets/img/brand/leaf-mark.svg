@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 260" role="img" aria-labelledby="leaf-title">
+  <title id="leaf-title">ExploreLand Farms leaf mark</title>
+  <defs>
+    <path id="leaf" d="M140 240C100 196 96 112 140 40c44 72 40 156 0 200Z"/>
+  </defs>
+  <use href="#leaf" fill="#588E43" transform="rotate(-6 140 240) translate(0 6) scale(.86)" transform-origin="140 240"/>
+  <use href="#leaf" fill="#ADE64C" transform="rotate(32 140 240)"/>
+  <use href="#leaf" fill="#92D71E" transform="rotate(-34 140 240)"/>
+</svg>

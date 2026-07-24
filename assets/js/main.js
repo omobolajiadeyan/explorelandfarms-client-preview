@@ -1,6 +1,22 @@
 (function () {
   "use strict";
 
+  // Shared asset resolver keeps injected UI working at the domain root and in
+  // the GitHub Pages preview subdirectory.
+  var mainScript = document.currentScript ||
+    document.querySelector('script[src*="assets/js/main.js"]');
+  var resolveSharedAsset = function (relativePath, rootFallback) {
+    return mainScript
+      ? new URL(relativePath, mainScript.src).href
+      : rootFallback;
+  };
+  var siteRoot = mainScript
+    ? new URL("../../", mainScript.src)
+    : new URL("/", window.location.href);
+  var resolveSiteRoute = function (route) {
+    return new URL(route.replace(/^\/+/, ""), siteRoot).href;
+  };
+
   // Branded loading state with a guaranteed escape hatch
   var finishLoading = function () {
     document.body.classList.add("is-ready");
@@ -27,19 +43,54 @@
   var toggle = document.querySelector(".nav-toggle");
   var navLinks = document.querySelector(".nav-links");
   if (toggle && navLinks) {
+    var closeMobileNav = function () {
+      navLinks.classList.remove("is-open");
+      document.body.classList.remove("nav-open");
+      toggle.setAttribute("aria-expanded", "false");
+      navLinks.querySelectorAll(".nav-group[open]").forEach(function (group) {
+        group.removeAttribute("open");
+      });
+    };
+
     toggle.addEventListener("click", function () {
       var open = navLinks.classList.toggle("is-open");
       document.body.classList.toggle("nav-open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
+
     navLinks.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function () {
-        navLinks.classList.remove("is-open");
-        document.body.classList.remove("nav-open");
-        navLinks.querySelectorAll(".nav-group[open]").forEach(function (group) {
-          group.removeAttribute("open");
+        closeMobileNav();
+      });
+    });
+
+    navLinks.querySelectorAll(".nav-group").forEach(function (group) {
+      group.addEventListener("toggle", function () {
+        if (!group.open || window.innerWidth > 1100) return;
+        navLinks.querySelectorAll(".nav-group[open]").forEach(function (otherGroup) {
+          if (otherGroup !== group) otherGroup.removeAttribute("open");
         });
       });
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!document.body.classList.contains("nav-open")) return;
+      if (!navLinks.contains(event.target) && !toggle.contains(event.target)) {
+        closeMobileNav();
+      }
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 1100 && navLinks.classList.contains("is-open")) {
+        closeMobileNav();
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && navLinks.classList.contains("is-open")) {
+        closeMobileNav();
+        toggle.focus();
+      }
     });
   }
 
@@ -78,6 +129,35 @@
       img.addEventListener("load", markReady, { once: true });
       img.addEventListener("error", markReady, { once: true });
     }
+  });
+
+  // Apply the official farm mark to photographs without touching brand/UI assets.
+  var farmWatermark = resolveSharedAsset(
+    "../img/brand/logo-full-white.svg",
+    "/assets/img/brand/logo-full-white.svg"
+  );
+  document.querySelectorAll("main img").forEach(function (img) {
+    var source = img.currentSrc || img.getAttribute("src") || "";
+    if (
+      !source ||
+      /(?:^|\/)assets\/img\/brand\//i.test(source) ||
+      img.hasAttribute("data-no-watermark") ||
+      img.closest("[data-no-watermark], .contact-hub")
+    ) {
+      return;
+    }
+
+    var frame = img.parentElement;
+    if (!frame || frame.classList.contains("has-farm-watermark")) return;
+
+    frame.classList.add("has-farm-watermark");
+    img.setAttribute("draggable", "false");
+
+    var mark = document.createElement("span");
+    mark.className = "farm-image-watermark";
+    mark.setAttribute("aria-hidden", "true");
+    mark.style.backgroundImage = 'url("' + farmWatermark + '")';
+    frame.appendChild(mark);
   });
 
   // Stagger children automatically within [data-stagger]
@@ -303,12 +383,180 @@
     });
   }
 
+  // Interactive sustainability system: relevant icons, linked detail and gentle auto-focus
+  var ecoOrbit = document.querySelector(".eco-orbit");
+  var ecoNodes = Array.from(document.querySelectorAll("[data-eco-story]"));
+  var ecoPanels = Array.from(document.querySelectorAll("[data-eco-panel]"));
+  if (ecoOrbit && ecoNodes.length && ecoPanels.length) {
+    var ecoIndex = 0;
+    var ecoTimer = 0;
+    var ecoInView = true;
+    var ecoPaused = false;
+
+    var setEcoActive = function (index) {
+      ecoIndex = (index + ecoNodes.length) % ecoNodes.length;
+      var key = ecoNodes[ecoIndex].getAttribute("data-eco-story");
+      ecoNodes.forEach(function (node, nodeIndex) {
+        var active = nodeIndex === ecoIndex;
+        node.classList.toggle("is-active", active);
+        node.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      ecoPanels.forEach(function (panel) {
+        panel.classList.toggle("is-active", panel.getAttribute("data-eco-panel") === key);
+      });
+    };
+
+    var scheduleEco = function () {
+      window.clearTimeout(ecoTimer);
+      if (reduceMotion || ecoPaused || !ecoInView || document.hidden) return;
+      ecoTimer = window.setTimeout(function () {
+        setEcoActive(ecoIndex + 1);
+        scheduleEco();
+      }, 3800);
+    };
+
+    ecoNodes.forEach(function (node, index) {
+      node.addEventListener("click", function () {
+        setEcoActive(index);
+        scheduleEco();
+      });
+      node.addEventListener("pointerenter", function () {
+        setEcoActive(index);
+      });
+    });
+    ecoOrbit.addEventListener("pointerenter", function () {
+      ecoPaused = true;
+      scheduleEco();
+    });
+    ecoOrbit.addEventListener("pointerleave", function () {
+      ecoPaused = false;
+      scheduleEco();
+    });
+    ecoOrbit.addEventListener("focusin", function () {
+      ecoPaused = true;
+      scheduleEco();
+    });
+    ecoOrbit.addEventListener("focusout", function () {
+      ecoPaused = false;
+      scheduleEco();
+    });
+    document.addEventListener("visibilitychange", scheduleEco);
+
+    if ("IntersectionObserver" in window) {
+      var ecoObserver = new IntersectionObserver(function (entries) {
+        ecoInView = entries[0].isIntersecting;
+        scheduleEco();
+      }, { threshold: 0.25 });
+      ecoObserver.observe(ecoOrbit);
+    }
+
+    setEcoActive(0);
+    scheduleEco();
+  }
+
+  // Compact client-story carousel with controls, keyboard support and restrained autoplay
+  var testimonialTrack = document.getElementById("testimonial-track");
+  if (testimonialTrack) {
+    var testimonialCards = Array.from(testimonialTrack.querySelectorAll(".testimonial-card"));
+    var testimonialPrev = document.querySelector(".testimonial-prev");
+    var testimonialNext = document.querySelector(".testimonial-next");
+    var testimonialProgress = document.querySelector(".testimonial-progress b");
+    var testimonialIndex = 0;
+    var testimonialTimer = 0;
+    var testimonialInView = true;
+    var testimonialPaused = false;
+    var testimonialScrollFrame = 0;
+
+    var updateTestimonialProgress = function () {
+      if (!testimonialCards.length) return;
+      var closestIndex = 0;
+      var closestDistance = Infinity;
+      testimonialCards.forEach(function (card, index) {
+        var cardPosition = card.offsetLeft - testimonialTrack.offsetLeft;
+        var distance = Math.abs(cardPosition - testimonialTrack.scrollLeft);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+      testimonialIndex = closestIndex;
+      if (testimonialProgress) testimonialProgress.textContent = String(testimonialIndex + 1);
+    };
+
+    var showTestimonial = function (index) {
+      testimonialIndex = (index + testimonialCards.length) % testimonialCards.length;
+      testimonialTrack.scrollTo({
+        left: testimonialCards[testimonialIndex].offsetLeft - testimonialTrack.offsetLeft,
+        behavior: reduceMotion ? "auto" : "smooth"
+      });
+      if (testimonialProgress) testimonialProgress.textContent = String(testimonialIndex + 1);
+    };
+
+    var scheduleTestimonials = function () {
+      window.clearTimeout(testimonialTimer);
+      if (reduceMotion || testimonialPaused || !testimonialInView || document.hidden) return;
+      testimonialTimer = window.setTimeout(function () {
+        showTestimonial(testimonialIndex + 1);
+        scheduleTestimonials();
+      }, 6200);
+    };
+
+    if (testimonialPrev) testimonialPrev.addEventListener("click", function () {
+      showTestimonial(testimonialIndex - 1);
+      scheduleTestimonials();
+    });
+    if (testimonialNext) testimonialNext.addEventListener("click", function () {
+      showTestimonial(testimonialIndex + 1);
+      scheduleTestimonials();
+    });
+    testimonialTrack.addEventListener("scroll", function () {
+      window.cancelAnimationFrame(testimonialScrollFrame);
+      testimonialScrollFrame = window.requestAnimationFrame(updateTestimonialProgress);
+    }, { passive: true });
+    testimonialTrack.addEventListener("pointerenter", function () {
+      testimonialPaused = true;
+      scheduleTestimonials();
+    });
+    testimonialTrack.addEventListener("pointerleave", function () {
+      testimonialPaused = false;
+      scheduleTestimonials();
+    });
+    testimonialTrack.addEventListener("focusin", function () {
+      testimonialPaused = true;
+      scheduleTestimonials();
+    });
+    testimonialTrack.addEventListener("focusout", function () {
+      testimonialPaused = false;
+      scheduleTestimonials();
+    });
+    document.addEventListener("visibilitychange", scheduleTestimonials);
+
+    if ("IntersectionObserver" in window) {
+      var testimonialObserver = new IntersectionObserver(function (entries) {
+        testimonialInView = entries[0].isIntersecting;
+        scheduleTestimonials();
+      }, { threshold: 0.2 });
+      testimonialObserver.observe(testimonialTrack);
+    }
+
+    updateTestimonialProgress();
+    scheduleTestimonials();
+  }
+
   // One compact support hub: instant site guidance with a clear WhatsApp handoff
+  // Resolve from this script so the avatar also works from GitHub Pages subdirectories.
+  var assistantAvatar = resolveSharedAsset(
+    "../img/brand/exploreland-farmer-assistant.webp",
+    "/assets/img/brand/exploreland-farmer-assistant.webp"
+  );
   var hubMarkup = [
     '<aside class="contact-hub" aria-label="ExploreLand Farms help">',
       '<section class="contact-hub-panel" id="contact-hub-panel" role="dialog" aria-modal="false" aria-labelledby="contact-hub-heading" aria-hidden="true">',
         '<header class="contact-hub-head">',
-          '<span class="contact-hub-avatar"><img src="/assets/img/brand/leaf-mark.png" alt=""></span>',
+          '<span class="contact-hub-avatar">',
+            '<i class="bi bi-person-fill contact-hub-avatar-fallback" aria-hidden="true"></i>',
+            '<img src="' + assistantAvatar + '" alt="ExploreLand farmer assistant" onerror="this.remove()">',
+          '</span>',
           '<span class="contact-hub-title">',
             '<strong id="contact-hub-heading">Ask ExploreLand</strong>',
             '<span>Instant guide · WhatsApp handoff</span>',
@@ -330,12 +578,16 @@
         '</form>',
         '<div class="contact-hub-actions">',
           '<a class="contact-hub-whatsapp" href="https://wa.me/2348148164213?text=Hello%20ExploreLand%20Farms%2C%20I%20have%20an%20enquiry." target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp team</a>',
-          '<a class="contact-hub-contact" href="/contact/">Contact page</a>',
+          '<a class="contact-hub-contact" href="' + resolveSiteRoute("/contact/") + '">Contact page</a>',
         '</div>',
         '<p class="contact-hub-note">Instant website guide, not a live agent. Use WhatsApp for a personal response.</p>',
       '</section>',
       '<button class="contact-hub-launcher" type="button" aria-label="Open ExploreLand help" aria-expanded="false" aria-controls="contact-hub-panel">',
-        '<i class="bi bi-chat-dots-fill hub-icon-chat" aria-hidden="true"></i>',
+        '<span class="hub-icon-chat" aria-hidden="true">',
+          '<i class="bi bi-person-fill hub-farmer-fallback"></i>',
+          '<img src="' + assistantAvatar + '" alt="" onerror="this.remove()">',
+          '<span class="hub-chat-badge"><i class="bi bi-chat-dots-fill"></i></span>',
+        '</span>',
         '<i class="bi bi-x-lg hub-icon-close" aria-hidden="true"></i>',
         '<span class="contact-hub-status-dot" aria-hidden="true"></span>',
       '</button>',
